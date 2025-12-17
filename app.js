@@ -26,6 +26,9 @@ const els = {
 
   clearBtn: $("#clearBtn"),
   exportBtn: $("#exportBtn"),
+
+  seedBtn: $("#seedBtn"),
+  importFile: $("#importFile"),
 };
 
 els.year.textContent = new Date().getFullYear();
@@ -320,5 +323,67 @@ els.exportBtn.addEventListener("click", (e) => {
   a.click();
   URL.revokeObjectURL(url);
 });
+
+function seedDemo() {
+  const ok = confirm("¿Cargar datos de ejemplo? Se añadirán a tu lista actual.");
+  if (!ok) return;
+
+  const now = new Date().toISOString();
+  const demo = [
+    { id: uid(), title: "Entreno fuerza", kind: "entreno", date: "", minutes: 60, notes: "Pierna + core", done: false, createdAt: now },
+    { id: uid(), title: "Preparar sesión fútbol", kind: "tarea", date: "", minutes: 30, notes: "Ejercicios + conos", done: false, createdAt: now },
+    { id: uid(), title: "Movilidad", kind: "entreno", date: "", minutes: 15, notes: "Cadera y tobillo", done: true, createdAt: now },
+  ];
+
+  items = [...demo, ...items];
+  saveItems(items);
+  render();
+}
+
+function importJsonFile(file) {
+  const reader = new FileReader();
+  reader.onload = () => {
+    try {
+      const data = JSON.parse(reader.result);
+      if (!Array.isArray(data)) throw new Error("JSON inválido: se esperaba un array.");
+
+      const ok = confirm("¿Importar y AÑADIR estos elementos a tu lista actual?");
+      if (!ok) return;
+
+      // Sanitiza campos mínimos
+      const cleaned = data.map((x) => ({
+        id: x.id || uid(),
+        title: (x.title ?? "").toString().slice(0, 60),
+        kind: x.kind === "tarea" ? "tarea" : "entreno",
+        date: (x.date ?? "").toString(),
+        minutes: x.minutes === "" || x.minutes == null ? "" : Number(x.minutes),
+        notes: (x.notes ?? "").toString().slice(0, 200),
+        done: !!x.done,
+        createdAt: x.createdAt || new Date().toISOString(),
+      })).filter((x) => x.title.trim().length > 0);
+
+      items = [...cleaned, ...items];
+      saveItems(items);
+      render();
+      alert(`Importados: ${cleaned.length}`);
+    } catch (err) {
+      alert(`No se pudo importar: ${err.message}`);
+    }
+  };
+  reader.readAsText(file);
+}
+
+els.seedBtn.addEventListener("click", (e) => {
+  e.preventDefault();
+  seedDemo();
+});
+
+els.importFile.addEventListener("change", (e) => {
+  const file = e.target.files?.[0];
+  if (!file) return;
+  importJsonFile(file);
+  e.target.value = ""; // permite importar el mismo archivo otra vez
+});
+
 
 render();
