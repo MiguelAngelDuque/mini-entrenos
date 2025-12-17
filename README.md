@@ -5,6 +5,8 @@ Mini CRUD en JavaScript con LocalStorage: crear, editar, borrar, marcar completa
 ## Demo
 https://miguelangelduque.github.io/mini-entrenos/
 
+![Captura de la app](./screenshot.png)
+
 ## Funcionalidades
 - Crear / editar / borrar elementos
 - Marcar como completado
