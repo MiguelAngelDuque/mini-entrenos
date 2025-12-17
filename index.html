@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Mini app | Tareas / Entrenos</title>
+  <link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+  <header class="header">
+    <div class="container nav">
+      <a class="logo" href="#">Mini app</a>
+      <div class="nav-right">
+        <a class="link" href="#" id="exportBtn">Exportar JSON</a>
+        <a class="link danger" href="#" id="clearBtn">Borrar todo</a>
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="hero">
+      <h1>Tareas / Entrenos</h1>
+      <p class="sub">CRUD con LocalStorage, filtros, búsqueda, edición y estado completado.</p>
+      <div class="stats" id="stats"></div>
+    </section>
+
+    <section class="panel">
+      <form id="form" class="card form" autocomplete="off">
+        <input type="hidden" id="id">
+
+        <div class="field">
+          <label for="title">Título *</label>
+          <input id="title" name="title" type="text" placeholder="Ej: Entreno fuerza" maxlength="60" required>
+          <small class="hint">Máx. 60 caracteres.</small>
+        </div>
+
+        <div class="row">
+          <div class="field">
+            <label for="kind">Tipo</label>
+            <select id="kind" name="kind">
+              <option value="entreno">Entreno</option>
+              <option value="tarea">Tarea</option>
+            </select>
+          </div>
+
+          <div class="field">
+            <label for="date">Fecha</label>
+            <input id="date" name="date" type="date">
+          </div>
+
+          <div class="field">
+            <label for="minutes">Minutos</label>
+            <input id="minutes" name="minutes" type="number" min="0" max="600" placeholder="60">
+          </div>
+        </div>
+
+        <div class="field">
+          <label for="notes">Notas</label>
+          <textarea id="notes" name="notes" rows="3" maxlength="200" placeholder="Opcional (máx 200)"></textarea>
+        </div>
+
+        <div class="actions">
+          <button class="btn" type="submit" id="submitBtn">Añadir</button>
+          <button class="btn ghost" type="button" id="cancelBtn" hidden>Cancelar edición</button>
+        </div>
+
+        <p class="error" id="error" role="alert" aria-live="polite"></p>
+      </form>
+
+      <div class="card controls">
+        <div class="row">
+          <div class="field">
+            <label for="q">Búsqueda</label>
+            <input id="q" type="search" placeholder="Buscar por título o notas...">
+          </div>
+
+          <div class="field">
+            <label for="filterKind">Filtro tipo</label>
+            <select id="filterKind">
+              <option value="all">Todos</option>
+              <option value="entreno">Entreno</option>
+              <option value="tarea">Tarea</option>
+            </select>
+          </div>
+
+          <div class="field">
+            <label for="filterDone">Estado</label>
+            <select id="filterDone">
+              <option value="all">Todos</option>
+              <option value="pending">Pendiente</option>
+              <option value="done">Completado</option>
+            </select>
+          </div>
+
+          <div class="field">
+            <label for="sort">Orden</label>
+            <select id="sort">
+              <option value="createdDesc">Más recientes</option>
+              <option value="createdAsc">Más antiguos</option>
+              <option value="dateAsc">Fecha ↑</option>
+              <option value="dateDesc">Fecha ↓</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <section class="card list">
+        <h2>Lista</h2>
+        <div id="list"></div>
+        <p class="muted" id="empty" hidden>No hay elementos aún. Añade el primero arriba.</p>
+      </section>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <small>Hecho por Miguel Angel Duque Calatayud · <span id="year"></span></small>
+  </footer>
+
+  <script src="./app.js"></script>
+</body>
+</html>
