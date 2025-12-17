@@ -166,6 +166,9 @@ function renderStats(filtered) {
   const done = items.filter((i) => i.done).length;
   const pending = total - done;
   const shown = filtered.length;
+  const totalMinutes = items.reduce((acc, i) => acc + (Number.isFinite(i.minutes) ? i.minutes : 0), 0);
+  const shownMinutes = filtered.reduce((acc, i) => acc + (Number.isFinite(i.minutes) ? i.minutes : 0), 0);
+
 
   els.stats.innerHTML = "";
   const pills = [
@@ -173,6 +176,9 @@ function renderStats(filtered) {
     `Pendientes: ${pending}`,
     `Completados: ${done}`,
     `Mostrando: ${shown}`,
+    `Minutos total: ${totalMinutes}`,
+    `Minutos (mostrando): ${shownMinutes}`,
+
   ];
 
   for (const p of pills) {
